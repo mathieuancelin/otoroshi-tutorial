@@ -1,19 +1,23 @@
-# Download Otoroshi and its CLI
+# Try Otoroshi
+
+in this tutorial, we will see how to get and install Otoroshi, and how to proxy an http api with load balancing
+
+## Step 1 - Download Otoroshi and its CLI
 
 ```sh
 wget --quiet https://dl.bintray.com/mathieuancelin/otoroshi/latest/otoroshi.jar
 wget --quiet https://github.com/MAIF/otoroshi/edit/master/clients/cli/otoroshicli.toml
-wget --quiet https://dl.bintray.com/mathieuancelin/otoroshi/latest/linux-otoroshicli -O otoroshicli
+wget --quiet https://dl.bintray.com/mathieuancelin/otoroshi/linux-otoroshicli/latest/otoroshicli
 chmod +x ./otoroshicli
 ```
 
-# Run Otoroshi
+## Step 2 - Run Otoroshi
 
 ```sh
 java -jar otoroshi.jar &
 ```
 
-# Check if admin api works
+## Step 3 - Check if admin api works
 
 ```sh
 ./otoroshicli services all
@@ -21,7 +25,7 @@ java -jar otoroshi.jar &
 ./otoroshicli groups all
 ```
 
-# Create a service 
+## Step 4 - Create a service 
 
 the service will proxy call to https://freegeoip.net through http://ip.geo.com:8080
 
@@ -37,7 +41,7 @@ Then test it
 ./otoroshicli tryout call "http://127.0.0.1:8080/" -X GET -H 'Host: ip.geo.com'
 ```
 
-# Try loadbalancing
+## Step 5 - Try loadbalancing
 
 Run 3 new microservices in 3 new terminal processes
 
@@ -93,7 +97,7 @@ Then kill the last microservices and test it to observe connection error
 ./otoroshicli tryout call "http://127.0.0.1:8080/" -H 'Host: api.hello.com' -H 'Accept: application/json'
 ```
 
-# delete your service
+then delete your service
 
 ```sh
 ./otoroshicli services delete hello-api
