@@ -2,6 +2,12 @@
 
 in this tutorial, we will see how to get and install Otoroshi, and how to proxy an http api with load balancing
 
+## Step 0 - install tools
+
+```sh
+sudo apt-get install openssl libssl1.0.0 libssl-dev
+```
+
 ## Step 1 - Download Otoroshi and its CLI
 
 ```sh
@@ -41,7 +47,7 @@ Then test it
 ./otoroshicli tryout call "http://127.0.0.1:8080/" -X GET -H 'Host: ip.geo.com'
 ```
 
-## Step 5 - Try loadbalancing
+## Step 5 -  Create a new service with multiple targets
 
 Run 3 new microservices in 3 new terminal processes
 
@@ -60,6 +66,8 @@ Create a service that will loadbalance between these 3 microservices and serves 
   --target "http://127.0.0.1:9902" \
   --public-pattern '/.*' --no-force-https --client-retries 3
 ```
+
+## Step 6 - Try loadbalancing
 
 Then test it multiple time to observe loadbalancing
 
@@ -97,8 +105,16 @@ Then kill the last microservices and test it to observe connection error
 ./otoroshicli tryout call "http://127.0.0.1:8080/" -H 'Host: api.hello.com' -H 'Accept: application/json'
 ```
 
-then delete your service
+## Step 7 - stop everything
+
+now you can delete your service
 
 ```sh
 ./otoroshicli services delete hello-api
+```
+
+and stop otoroshi
+
+```sh
+killall java
 ```
