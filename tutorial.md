@@ -10,7 +10,7 @@ tar xf openssl-1.1.0f.tar.gz
 cd openssl-1.1.0f
 ./Configure linux-x86_64 -fPIC
 make -j$(nproc)
-make install
+sudo make install
 cd ..
 ```
 
