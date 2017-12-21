@@ -4,6 +4,8 @@ in this tutorial, we will see how to get and install Otoroshi, and how to proxy 
 
 ## Step 0 - install tools
 
+given that the linux provided by Google Cloud Shell does not provide v1.1.0 of openssl, we need to rebuild it :(
+
 ```sh
 curl -O https://www.openssl.org/source/openssl-1.1.0f.tar.gz
 tar xf openssl-1.1.0f.tar.gz
