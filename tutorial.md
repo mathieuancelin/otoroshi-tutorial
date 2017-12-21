@@ -5,6 +5,7 @@ in this tutorial, we will see how to get and install Otoroshi, and how to proxy 
 ## Step 0 - install tools
 
 ```sh
+sudo apt-get update
 sudo apt-get install openssl libssl1.0.0 libssl-dev
 ```
 
