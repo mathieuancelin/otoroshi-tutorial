@@ -1,3 +1,5 @@
 #!/bin/sh
 
+IP_ADDRESS=`hostname --ip-address`
+sed -i "s/ipadd/$IP_ADDRESS/g" ./otoroshicli.toml
 docker run -v $PWD/otoroshicli.toml:/usr/app/otoroshicli.toml otoroshicli $@
