@@ -2,36 +2,21 @@
 
 in this tutorial, we will see how to get and install Otoroshi, and how to proxy an http api with load balancing
 
-## Step 0 - install tools
+## Step 0 - install and run demo env.
 
-given that the linux provided by Google Cloud Shell does not provide v1.1.0 of openssl, we need to rebuild it :(
-
-```sh
-curl -O https://www.openssl.org/source/openssl-1.1.0f.tar.gz
-tar xf openssl-1.1.0f.tar.gz
-cd openssl-1.1.0f
-./Configure linux-x86_64 -fPIC
-make -j$(nproc)
-sudo make install
-cd ..
-```
-
-## Step 1 - Download Otoroshi and its CLI
+Otoroshi demo environment is provided as a docker image, you just have to run the following command
 
 ```sh
-wget --quiet https://dl.bintray.com/mathieuancelin/otoroshi/latest/otoroshi.jar
-wget --quiet https://github.com/MAIF/otoroshi/edit/master/clients/cli/otoroshicli.toml
-wget --quiet https://dl.bintray.com/mathieuancelin/otoroshi/linux-otoroshicli/latest/otoroshicli
-chmod +x ./otoroshicli
+docker run -it maif-docker-docker.bintray.io/otoroshi-demo bash
 ```
 
-## Step 2 - Run Otoroshi
+## Step 1 - Run Otoroshi
 
 ```sh
 java -jar otoroshi.jar &
 ```
 
-## Step 3 - Check if admin api works
+## Step 2 - Check if admin api works
 
 ```sh
 ./otoroshicli services all
@@ -39,7 +24,7 @@ java -jar otoroshi.jar &
 ./otoroshicli groups all
 ```
 
-## Step 4 - Create a service 
+## Step 3 - Create a service 
 
 the service will proxy call to https://freegeoip.net through http://ip.geo.com:8080
 
@@ -55,14 +40,14 @@ Then test it
 ./otoroshicli tryout call "http://127.0.0.1:8080/" -X GET -H 'Host: ip.geo.com'
 ```
 
-## Step 5 -  Create a new service with multiple targets
+## Step 4 -  Create a new service with multiple targets
 
 Run 3 new microservices in 3 new terminal processes
 
 ```sh
-./otoroshicli tryout serve 9901
-./otoroshicli tryout serve 9902
-./otoroshicli tryout serve 9903
+./otoroshicli tryout serve 9901 & 
+./otoroshicli tryout serve 9902 &
+./otoroshicli tryout serve 9903 &
 ```
 
 Create a service that will loadbalance between these 3 microservices and serves them through http://api.hello.com:8080
@@ -75,7 +60,7 @@ Create a service that will loadbalance between these 3 microservices and serves 
   --public-pattern '/.*' --no-force-https --client-retries 3
 ```
 
-## Step 6 - Try loadbalancing
+## Step 5 - Try loadbalancing
 
 Then test it multiple time to observe loadbalancing
 
@@ -95,19 +80,39 @@ Then test it multiple time to observe loadbalancing
 ./otoroshicli tryout call "http://127.0.0.1:8080/" -H 'Host: api.hello.com' -H 'Accept: application/json'
 ```
 
-Then kill one of the microservices and test it multiple time to observe loadbalancing
+## Step 6 - kill some processes
+
+Kill the first server 
+
+```sh
+ps aux  |  grep -i 9901 |  grep -v grep   | awk '{print $2}' | xargs kill
+```
+
+test it multiple time to observe loadbalancing
 
 ```sh
 ./otoroshicli tryout call "http://127.0.0.1:8080/" -H 'Host: api.hello.com' -H 'Accept: application/json'
 ```
 
-Then kill a second microservices and test it multiple time to observe loadbalancing
+Then kill the second server 
+
+```sh
+ps aux  |  grep -i 9902 |  grep -v grep   | awk '{print $2}' | xargs kill
+```
+
+and test it multiple time to observe loadbalancing
 
 ```sh
 ./otoroshicli tryout call "http://127.0.0.1:8080/" -H 'Host: api.hello.com' -H 'Accept: application/json'
 ```
 
-Then kill the last microservices and test it to observe connection error
+Then kill the last server 
+
+```sh
+ps aux  |  grep -i 9903 |  grep -v grep   | awk '{print $2}' | xargs kill
+```
+
+and test it to observe connection error
 
 ```sh
 ./otoroshicli tryout call "http://127.0.0.1:8080/" -H 'Host: api.hello.com' -H 'Accept: application/json'
@@ -121,8 +126,14 @@ now you can delete your service
 ./otoroshicli services delete hello-api
 ```
 
-and stop otoroshi
+stop otoroshi
 
 ```sh
-killall java
+ps aux  |  grep -i java |  grep -v grep   | awk '{print $2}' | xargs kill
+```
+
+and stop the container
+
+```sh
+exit
 ```
