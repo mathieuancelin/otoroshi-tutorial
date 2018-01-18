@@ -42,7 +42,7 @@ Then test it
 
 ## Step 4 -  Create a new service with multiple targets
 
-Run 3 new microservices in 3 new terminal processes
+Run 3 web server on different ports. Each server will expose an API responding with different names.
 
 ```sh
 ./otoroshicli tryout serve 9901 & 
@@ -50,7 +50,7 @@ Run 3 new microservices in 3 new terminal processes
 ./otoroshicli tryout serve 9903 &
 ```
 
-Create a service that will loadbalance between these 3 microservices and serves them through http://api.hello.com:8080
+Create a service that will loadbalance between these 3 services and serves them through http://api.hello.com:8080
 
 ```sh
 ./otoroshicli services create --group default --id hello-api --name hello-api \
