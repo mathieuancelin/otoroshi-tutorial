@@ -98,7 +98,7 @@ test it multiple time to observe loadbalancing
 Then kill the second server 
 
 ```sh
-ps aux  |  grep -i 9902 |  grep -v grep   | awk '{print $2}' | xargs kill
+ps aux | grep -i 9902 | grep -v grep | awk '{print $2}' | xargs kill
 ```
 
 and test it multiple time to observe loadbalancing
@@ -110,7 +110,7 @@ and test it multiple time to observe loadbalancing
 Then kill the last server 
 
 ```sh
-ps aux  |  grep -i 9903 |  grep -v grep   | awk '{print $2}' | xargs kill
+ps aux | grep -i 9903 | grep -v grep | awk '{print $2}' | xargs kill
 ```
 
 and test it to observe connection error
@@ -130,7 +130,7 @@ now you can delete your service
 stop otoroshi
 
 ```sh
-ps aux  |  grep -i java |  grep -v grep   | awk '{print $2}' | xargs kill
+ps aux | grep -i java | grep -v grep | awk '{print $2}' | xargs kill
 ```
 
 and stop the container
