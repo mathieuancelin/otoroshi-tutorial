@@ -7,8 +7,7 @@ in this tutorial, we will see how to get and install Otoroshi, and how to proxy 
 Otoroshi demo environment is provided as a docker image, you just have to run the following command
 
 ```sh
-docker build --no-cache -t otoroshi-demo .
-docker run -p "8080:8080" -it otoroshi-demo bash
+docker run -p "8080:8080" -it maif/otoroshi-demo bash
 ```
 
 ## Step 1 - Run Otoroshi
